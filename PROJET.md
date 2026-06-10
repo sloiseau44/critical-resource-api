@@ -28,6 +28,10 @@ Projet portfolio orienté défense/industrie.
 - PR vers main à la fin de chaque epic
 - Versioning sémantique
 
+## Démarrage rapide
+1. `docker-compose up -d` — démarrer PostgreSQL
+2. `mvn verify` — lancer tous les tests
+
 ## Avancement
 
 ### ✅ Epic 1 — Setup (branche : epic/1-setup — mergée)
