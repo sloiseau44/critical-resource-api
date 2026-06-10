@@ -1,6 +1,7 @@
 package com.criticalresource.criticalresourceapi.auth;
 
 import com.criticalresource.criticalresourceapi.domain.user.User;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,14 +17,37 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String generateToken(User user) {
-        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
+    public String generateToken(User user) {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .claim("role", user.getRole())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(key)
+                .signWith(getSigningKey())
                 .compact();
+    }
+
+    public String extractUsername(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+
+    public boolean isTokenValid (String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }

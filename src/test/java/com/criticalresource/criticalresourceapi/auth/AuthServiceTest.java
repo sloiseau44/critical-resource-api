@@ -34,7 +34,7 @@ class AuthServiceTest {
     void should_return_token_when_credentials_are_valid() {
         User user = User.builder()
                 .username("jdupont")
-                .email("jdupont@defense.fr")
+                .email("jdupont@test.fr")
                 .password("encoded_password")
                 .role(Role.OPERATEUR)
                 .build();
