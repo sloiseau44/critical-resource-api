@@ -34,13 +34,17 @@ Projet portfolio orienté défense/industrie.
 - [x] 1.1 Initialiser le projet Maven Spring Boot 21
 - [x] 1.2 Configurer PostgreSQL, JPA et Liquibase
 
-### 🚧 Epic 2 — Entités & Persistence (branche : epic/2-entities)
-- [ ] 2.1 Modéliser et persister un utilisateur
-- [ ] 2.2 Modéliser et persister une ressource critique
-- [ ] 2.3 Modéliser et persister une réservation
-- [ ] 2.4 Modéliser et persister une entrée d'audit
+### ✅ Epic 2 — Entités & Persistence (mergée)
+- [x] 2.1 Modéliser et persister un utilisateur
+- [x] 2.2 Modéliser et persister une ressource critique
+- [x] 2.3 Modéliser et persister une réservation
+- [x] 2.4 Modéliser et persister une entrée d'audit
 
-### ⏳ Epic 3 — Sécurité
+### 🚧 Epic 3 — Sécurité (branche : epic/3-security)
+- [ ] 3.1 Définir les rôles ADMIN, GESTIONNAIRE, OPERATEUR
+- [ ] 3.2 Permettre à un utilisateur de se connecter et recevoir un token JWT
+- [ ] 3.3 Valider le token JWT sur chaque requête
+
 ### ⏳ Epic 4 — API Resources
 ### ⏳ Epic 5 — API Reservations
 ### ⏳ Epic 6 — Audit & Docs
