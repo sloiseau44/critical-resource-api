@@ -34,7 +34,7 @@ Projet portfolio orienté défense/industrie.
 
 ## Avancement
 
-### ✅ Epic 1 — Setup (branche : epic/1-setup — mergée)
+### ✅ Epic 1 — Setup (mergée)
 - [x] 1.1 Initialiser le projet Maven Spring Boot 21
 - [x] 1.2 Configurer PostgreSQL, JPA et Liquibase
 
@@ -44,20 +44,46 @@ Projet portfolio orienté défense/industrie.
 - [x] 2.3 Modéliser et persister une réservation
 - [x] 2.4 Modéliser et persister une entrée d'audit
 
-### 🚧 Epic 3 — Sécurité (branche : epic/3-security)
-- [ ] 3.1 Définir les rôles ADMIN, GESTIONNAIRE, OPERATEUR
-- [ ] 3.2 Permettre à un utilisateur de se connecter et recevoir un token JWT
-- [ ] 3.3 Valider le token JWT sur chaque requête
+### ✅ Epic 3 — Sécurité (mergée)
+- [x] 3.1 Définir les rôles ADMIN, GESTIONNAIRE, OPERATEUR
+- [x] 3.2 Permettre à un utilisateur de se connecter et recevoir un token JWT
+- [x] 3.3 Valider le token JWT sur chaque requête et rejeter les accès non autorisés
 
-### ⏳ Epic 4 — API Resources
+### ⏳ Epic 4 — API Resources (branche : epic/4-api-resources)
+- [ ] 4.1 Lister toutes les ressources avec possibilité de filtrer par statut et catégorie
+- [ ] 4.2 Permettre à un GESTIONNAIRE de créer une nouvelle ressource critique
+- [ ] 4.3 Consulter le détail complet d'une ressource par son identifiant
+- [ ] 4.4 Permettre à un GESTIONNAIRE de modifier les informations d'une ressource
+- [ ] 4.5 Désactiver une ressource sans la supprimer physiquement de la base
+
 ### ⏳ Epic 5 — API Reservations
 ### ⏳ Epic 6 — Audit & Docs
 
 ## Structure du projet
 \```
 src/main/java/com/criticalresource/criticalresourceapi/
-src/main/resources/
-  application.properties
-  db/changelog/db.changelog-master.xml
-docker-compose.yml
+├── auth/
+│   ├── AuthService.java
+│   ├── JwtService.java
+│   └── JwtAuthenticationFilter.java
+├── config/
+│   └── SecurityConfig.java
+└── domain/
+    ├── audit/
+    │   ├── AuditAction.java
+    │   ├── AuditLog.java
+    │   └── AuditLogRepository.java
+    ├── reservation/
+    │   ├── Reservation.java
+    │   ├── ReservationRepository.java
+    │   └── ReservationStatus.java
+    ├── resource/
+    │   ├── Resource.java
+    │   ├── ResourceCategory.java
+    │   ├── ResourceRepository.java
+    │   └── ResourceStatus.java
+    └── user/
+        ├── Role.java
+        ├── User.java
+        └── UserRepository.java
 \```
