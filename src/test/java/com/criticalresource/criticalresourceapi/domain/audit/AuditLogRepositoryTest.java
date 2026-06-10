@@ -1,5 +1,8 @@
-package com.criticalresource.criticalresourceapi.domain.reservation;
+package com.criticalresource.criticalresourceapi.domain.audit;
 
+import com.criticalresource.criticalresourceapi.domain.reservation.Reservation;
+import com.criticalresource.criticalresourceapi.domain.reservation.ReservationRepository;
+import com.criticalresource.criticalresourceapi.domain.reservation.ReservationStatus;
 import com.criticalresource.criticalresourceapi.domain.resource.Resource;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceCategory;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
@@ -11,51 +14,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ReservationRepositoryTest {
+public class AuditLogRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private ResourceRepository resourceRepository;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
+    private AuditLogRepository auditLogRepository;
 
     @Test
-    void should_save_and_find_reservation_by_user() {
+    void should_save_and_find_log_by_user () {
         User user = User.builder()
                 .username("jdupont")
                 .email("jdupont@test.fr")
                 .password("encoded_password")
                 .build();
 
-        Resource resource = Resource.builder()
-                .name("Véhicule blindé VB-03")
-                .description("Véhicule blindé de transport de troupes")
-                .category(ResourceCategory.VEHICLE)
-                .status(ResourceStatus.AVAILABLE)
-                .build();
-
         userRepository.save(user);
-        resourceRepository.save(resource);
 
-        Reservation reservation = Reservation.builder()
+        AuditLog auditLogReservation = AuditLog.builder()
                 .user(user)
-                .resource(resource)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(1))
-                .status(ReservationStatus.CONFIRMED)
+                .action(AuditAction.CREATE)
+                .entityName("Reservation")
+                .entityId(32L)
+                .timestamp(LocalDate.now())
                 .build();
 
-        reservationRepository.save(reservation);
+        auditLogRepository.save(auditLogReservation);
 
-        assertThat(reservationRepository.findByUser(user)).hasSize(1);
+        AuditLog auditLogResource = AuditLog.builder()
+                .user(user)
+                .action(AuditAction.CREATE)
+                .entityName("Resource")
+                .entityId(2L)
+                .timestamp(LocalDate.now())
+                .build();
+
+        auditLogRepository.save(auditLogResource);
+
+        assertThat(auditLogRepository.findByUser(user)).hasSize(2);
+
     }
 }
