@@ -10,10 +10,12 @@ public class UserTest {
                 .username("jdupont")
                 .email("jdupont@test.fr")
                 .password("encoded_password")
+                .role(Role.ADMIN)
                 .build();
 
         assertThat(user.getUsername()).isEqualTo("jdupont");
         assertThat(user.getEmail()).isEqualTo("jdupont@test.fr");
+        assertThat(user.getRole()).isEqualTo(Role.ADMIN);
         assertThat(user.isEnabled()).isTrue();
     }
 }

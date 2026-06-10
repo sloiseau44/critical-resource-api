@@ -9,4 +9,5 @@
     <include file="classpath:db/changelog/changes/002-create-resources-table.xml"/>
     <include file="classpath:db/changelog/changes/003-create-reservations-table.xml"/>
     <include file="classpath:db/changelog/changes/004-create-audit-logs-table.xml"/>
+    <include file="classpath:db/changelog/changes/005-add-role-to-users.xml"/>
 </databaseChangeLog>
