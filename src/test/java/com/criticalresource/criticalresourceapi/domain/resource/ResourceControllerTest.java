@@ -87,5 +87,21 @@ public class ResourceControllerTest {
                         .andExpect(status().isCreated());
     }
 
+    @Test
+    public void should_return_200_when_getting_resource_by_id() throws Exception {
+        when(resourceService.getResourceById(1L)).thenReturn(
+                ResourceResponse.builder()
+                        .id(1L)
+                        .name("VB-01")
+                        .category(ResourceCategory.VEHICLE)
+                        .status(ResourceStatus.AVAILABLE)
+                        .build()
+        );
+
+        mockMvc.perform(get("/resources/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("VB-01"));
+    }
+
 
 }

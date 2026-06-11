@@ -39,4 +39,10 @@ public class ResourceService {
         Resource saved = resourceRepository.save(resource);
         return toResponse(saved);
     }
+
+    public ResourceResponse getResourceById(Long id) {
+        return resourceRepository.findById(id)
+                .map(this::toResponse)
+                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
+    }
 }

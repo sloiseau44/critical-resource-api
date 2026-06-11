@@ -22,6 +22,12 @@ public class ResourceController {
         return ResponseEntity.ok(resources);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResourceResponse> getResourceById(@PathVariable Long id) {
+        ResourceResponse resource = resourceService.getResourceById(id);
+        return ResponseEntity.ok(resource);
+    }
+
     @PostMapping
     public ResponseEntity<ResourceResponse> createResource(@RequestBody ResourceRequest resourceRequest) {
         ResourceResponse resourceResponse = resourceService.createResource(resourceRequest);

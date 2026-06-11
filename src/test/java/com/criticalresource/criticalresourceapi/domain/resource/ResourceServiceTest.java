@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,6 +78,24 @@ public class ResourceServiceTest {
 
         assertThat(resourceResponse.getName()).isEqualTo("Véhicule blindé VB-03");
         assertThat(resourceResponse.getDescription()).isEqualTo("Véhicule blindé de transport de troupes");
+        assertThat(resourceResponse.getCategory()).isEqualTo(ResourceCategory.VEHICLE);
+        assertThat(resourceResponse.getStatus()).isEqualTo(ResourceStatus.AVAILABLE);
+    }
+
+    @Test
+    public void should_return_one_resource_with_id() {
+        when(resourceRepository.findById(1L)).thenReturn(Optional.of(
+            Resource.builder()
+                    .id(1L)
+                    .name("Véhicule VB-01")
+                    .category(ResourceCategory.VEHICLE)
+                    .status(ResourceStatus.AVAILABLE)
+                    .build()
+        ));
+
+        ResourceResponse resourceResponse = resourceService.getResourceById(1L);
+
+        assertThat(resourceResponse.getName()).isEqualTo("Véhicule VB-01");
         assertThat(resourceResponse.getCategory()).isEqualTo(ResourceCategory.VEHICLE);
         assertThat(resourceResponse.getStatus()).isEqualTo(ResourceStatus.AVAILABLE);
     }
