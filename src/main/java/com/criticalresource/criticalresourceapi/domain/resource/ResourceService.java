@@ -27,4 +27,16 @@ public class ResourceService {
                 .map(this::toResponse)
                 .toList();
     }
+
+    public ResourceResponse createResource(ResourceRequest resourceRequest) {
+        Resource resource = Resource.builder()
+                .name(resourceRequest.getName())
+                .description(resourceRequest.getDescription())
+                .category(resourceRequest.getCategory())
+                .status(ResourceStatus.AVAILABLE)
+                .build();
+
+        Resource saved = resourceRepository.save(resource);
+        return toResponse(saved);
+    }
 }

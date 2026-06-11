@@ -6,15 +6,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @WebMvcTest(value = ResourceController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class ResourceControllerTest {
@@ -64,6 +67,24 @@ public class ResourceControllerTest {
         mockMvc.perform(get("/resources").param("category", "VEHICLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
+    }
+
+    @Test
+    public void should_return_201_when_creating_resource() throws Exception {
+        when(resourceService.createResource(any(ResourceRequest.class))).thenReturn(
+                ResourceResponse.builder()
+                        .id(1L)
+                        .name("VB-03")
+                        .description("Véhicule")
+                        .category(ResourceCategory.VEHICLE)
+                        .status(ResourceStatus.AVAILABLE)
+                        .build()
+        );
+
+        mockMvc.perform(post("/resources")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"VB-03\",\"description\":\"Véhicule\",\"category\":\"VEHICLE\"}"))
+                        .andExpect(status().isCreated());
     }
 
 
