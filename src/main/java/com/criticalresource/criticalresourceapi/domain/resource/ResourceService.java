@@ -45,4 +45,19 @@ public class ResourceService {
                 .map(this::toResponse)
                 .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
     }
+
+    public ResourceResponse updateResource(Long id, ResourceRequest resourceRequest) {
+        Resource existing = resourceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
+
+        Resource updated = Resource.builder()
+                .id(existing.getId())
+                .name(resourceRequest.getName())
+                .description(resourceRequest.getDescription())
+                .category(resourceRequest.getCategory())
+                .status(existing.getStatus())
+                .build();
+
+        return toResponse(resourceRepository.save(updated));
+    }
 }

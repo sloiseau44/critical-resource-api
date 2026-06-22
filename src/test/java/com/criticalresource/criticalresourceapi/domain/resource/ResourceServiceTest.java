@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -98,5 +99,51 @@ public class ResourceServiceTest {
         assertThat(resourceResponse.getName()).isEqualTo("Véhicule VB-01");
         assertThat(resourceResponse.getCategory()).isEqualTo(ResourceCategory.VEHICLE);
         assertThat(resourceResponse.getStatus()).isEqualTo(ResourceStatus.AVAILABLE);
+    }
+
+    @Test
+    public void should_update_resource_when_resource_exists() {
+        ResourceRequest resourceRequest = ResourceRequest.builder()
+                .name("Véhicule VB-01")
+                .category(ResourceCategory.VEHICLE)
+                .build();
+
+        when(resourceRepository.findById(1L)).thenReturn(Optional.of(
+            Resource.builder()
+                    .id(1L)
+                    .name("VB-01")
+                    .category(ResourceCategory.VEHICLE)
+                    .status(ResourceStatus.MAINTENANCE)
+                    .build()
+        ));
+
+
+        when(resourceRepository.save(any(Resource.class))).thenReturn(
+                Resource.builder()
+                        .id(1L)
+                        .name("Véhicule VB-01")
+                        .category(ResourceCategory.VEHICLE)
+                        .status(ResourceStatus.AVAILABLE)
+                        .build()
+        );
+
+        ResourceResponse resourceResponse = resourceService.updateResource(1L, resourceRequest);
+
+        assertThat(resourceResponse.getName()).isEqualTo("Véhicule VB-01");
+        assertThat(resourceResponse.getCategory()).isEqualTo(ResourceCategory.VEHICLE);
+        assertThat(resourceResponse.getStatus()).isEqualTo(ResourceStatus.AVAILABLE);
+    }
+
+    @Test
+    public void should_throw_exception_when_resource_not_found() {
+        ResourceRequest resourceRequest = ResourceRequest.builder()
+                .name("Véhicule VB-01")
+                .category(ResourceCategory.VEHICLE)
+                .build();
+
+        when(resourceRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> resourceService.updateResource(99L, resourceRequest))
+                .isInstanceOf(RuntimeException.class);
     }
 }

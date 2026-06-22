@@ -16,6 +16,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -101,6 +103,24 @@ public class ResourceControllerTest {
         mockMvc.perform(get("/resources/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("VB-01"));
+    }
+
+    @Test
+    public void should_return_200_when_updating_resource() throws Exception {
+        when(resourceService.updateResource(eq(1L), any(ResourceRequest.class))).thenReturn(
+                ResourceResponse.builder()
+                        .id(1L)
+                        .name("Véhicule VB-01")
+                        .category(ResourceCategory.VEHICLE)
+                        .status(ResourceStatus.AVAILABLE)
+                        .build()
+        );
+
+        mockMvc.perform(put("/resources/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Véhicule VB-01\",\"category\":\"VEHICLE\"}"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").value("Véhicule VB-01"));
     }
 
 
