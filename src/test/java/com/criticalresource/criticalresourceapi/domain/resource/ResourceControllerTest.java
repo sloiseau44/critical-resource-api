@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -121,6 +122,22 @@ public class ResourceControllerTest {
                         .content("{\"name\":\"Véhicule VB-01\",\"category\":\"VEHICLE\"}"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.name").value("Véhicule VB-01"));
+    }
+
+    @Test
+    public void should_return_200_when_disabling_resource() throws Exception {
+        when(resourceService.disableResource(eq(1L))).thenReturn(
+                ResourceResponse.builder()
+                        .id(1L)
+                        .name("Véhicule VB-01")
+                        .category(ResourceCategory.VEHICLE)
+                        .status(ResourceStatus.DISABLED)
+                        .build()
+        );
+
+        mockMvc.perform(delete("/resources/1"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.status").value("DISABLED"));
     }
 
 

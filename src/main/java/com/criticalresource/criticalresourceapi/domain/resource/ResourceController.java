@@ -39,4 +39,10 @@ public class ResourceController {
         ResourceResponse resource = resourceService.updateResource(id, resourceRequest);
         return ResponseEntity.ok(resource);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResourceResponse> disableResource(@PathVariable Long id) {
+        ResourceResponse resource = resourceService.disableResource(id);
+        return ResponseEntity.ok(resource);
+    }
 }

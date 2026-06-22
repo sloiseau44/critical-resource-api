@@ -47,8 +47,7 @@ public class ResourceService {
     }
 
     public ResourceResponse updateResource(Long id, ResourceRequest resourceRequest) {
-        Resource existing = resourceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
+        Resource existing = findResourceOrThrow(id);
 
         Resource updated = Resource.builder()
                 .id(existing.getId())
@@ -59,5 +58,21 @@ public class ResourceService {
                 .build();
 
         return toResponse(resourceRepository.save(updated));
+    }
+
+    public ResourceResponse disableResource(Long id) {
+        Resource existing = findResourceOrThrow(id);
+
+        Resource updated = Resource.builder()
+                .id(existing.getId())
+                .status(ResourceStatus.DISABLED)
+                .build();
+
+        return toResponse(resourceRepository.save(updated));
+    }
+
+    private Resource findResourceOrThrow(Long id) {
+        return resourceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
     }
 }
