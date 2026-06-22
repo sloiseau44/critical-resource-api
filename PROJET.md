@@ -49,14 +49,18 @@ Projet portfolio orienté défense/industrie.
 - [x] 3.2 Permettre à un utilisateur de se connecter et recevoir un token JWT
 - [x] 3.3 Valider le token JWT sur chaque requête et rejeter les accès non autorisés
 
-### ⏳ Epic 4 — API Resources (branche : epic/4-api-resources)
-- [ ] 4.1 Lister toutes les ressources avec possibilité de filtrer par statut et catégorie
-- [ ] 4.2 Permettre à un GESTIONNAIRE de créer une nouvelle ressource critique
-- [ ] 4.3 Consulter le détail complet d'une ressource par son identifiant
-- [ ] 4.4 Permettre à un GESTIONNAIRE de modifier les informations d'une ressource
-- [ ] 4.5 Désactiver une ressource sans la supprimer physiquement de la base
+### ✅ Epic 4 — API Resources (mergée)
+- [x] 4.1 Lister toutes les ressources avec possibilité de filtrer par statut et catégorie
+- [x] 4.2 Permettre à un GESTIONNAIRE de créer une nouvelle ressource critique
+- [x] 4.3 Consulter le détail complet d'une ressource par son identifiant
+- [x] 4.4 Permettre à un GESTIONNAIRE de modifier les informations d'une ressource
+- [x] 4.5 Désactiver une ressource sans la supprimer physiquement de la base
 
-### ⏳ Epic 5 — API Reservations
+### 🚧 Epic 5 — API Reservations (branche : epic/5-api-reservations)
+- [ ] 5.1 Permettre à un OPERATEUR de réserver une ressource sur une plage horaire
+- [ ] 5.2 Lister les réservations selon les droits de l'utilisateur connecté
+- [ ] 5.3 Permettre l'annulation d'une réservation avec vérification des droits
+- 
 ### ⏳ Epic 6 — Audit & Docs
 
 ## Structure du projet
@@ -80,7 +84,11 @@ src/main/java/com/criticalresource/criticalresourceapi/
     ├── resource/
     │   ├── Resource.java
     │   ├── ResourceCategory.java
+    │   ├── ResourceController.java
     │   ├── ResourceRepository.java
+    │   ├── ResourceRequest.java
+    │   ├── ResourceResponse.java
+    │   ├── ResourceService.java
     │   └── ResourceStatus.java
     └── user/
         ├── Role.java
