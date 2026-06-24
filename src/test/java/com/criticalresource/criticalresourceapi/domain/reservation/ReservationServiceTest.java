@@ -1,10 +1,6 @@
 package com.criticalresource.criticalresourceapi.domain.reservation;
 
-
-import com.criticalresource.criticalresourceapi.domain.resource.Resource;
-import com.criticalresource.criticalresourceapi.domain.resource.ResourceCategory;
-import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
-import com.criticalresource.criticalresourceapi.domain.resource.ResourceStatus;
+import com.criticalresource.criticalresourceapi.domain.resource.*;
 import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
@@ -15,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,7 +68,62 @@ public class ReservationServiceTest {
         assertThat(reservationResponse.getResourceId()).isEqualTo(1L);
         assertThat(reservationResponse.getStartDate()).isEqualTo(today);
         assertThat(reservationResponse.getEndDate()).isEqualTo(tomorrow);
+    }
+
+    @Test
+    public void should_return_all_reservations_when_user_is_admin_or_gestionnaire() {
+        User user = User.builder()
+                .username("jdupont")
+                .email("jdupont@test.fr")
+                .password("encoded_password")
+                .role(Role.ADMIN)
+                .build();
 
 
+        Resource resource = Resource.builder()
+                .id(1L)
+                .name("Véhicule VB-01")
+                .category(ResourceCategory.VEHICLE)
+                .status(ResourceStatus.AVAILABLE)
+                .build();
+
+        List<Reservation> reservationList = List.of(
+                Reservation.builder().user(user).resource(resource).startDate(LocalDate.now()).endDate(LocalDate.now().plusDays(1)).build(),
+                Reservation.builder().user(user).resource(resource).startDate(LocalDate.now().plusDays(2)).endDate(LocalDate.now().plusDays(3)).build()
+        );
+
+        when(reservationRepository.findAll()).thenReturn(reservationList);
+
+        List<ReservationResponse> listResource = reservationService.getReservations(user);
+
+        assertThat(listResource).hasSize(2);
+    }
+
+    @Test
+    public void should_return_only_user_reservations_when_user_is_operateur() {
+        User user = User.builder()
+                .username("jdupont")
+                .email("jdupont@test.fr")
+                .password("encoded_password")
+                .role(Role.OPERATEUR)
+                .build();
+
+        Resource resource = Resource.builder()
+                .id(1L)
+                .name("Véhicule VB-01")
+                .category(ResourceCategory.VEHICLE)
+                .status(ResourceStatus.AVAILABLE)
+                .build();
+
+        List<Reservation> userReservations = List.of(
+                Reservation.builder().user(user).resource(resource)
+                        .startDate(LocalDate.now()).endDate(LocalDate.now().plusDays(1)).build()
+        );
+
+        when(reservationRepository.findByUser(user)).thenReturn(userReservations);
+
+        List<ReservationResponse> listResource = reservationService.getReservations(user);
+
+        assertThat(listResource).hasSize(1);
     }
 }

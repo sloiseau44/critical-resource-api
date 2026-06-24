@@ -1,8 +1,8 @@
 package com.criticalresource.criticalresourceapi.domain.reservation;
 
 import com.criticalresource.criticalresourceapi.auth.JwtService;
-import com.criticalresource.criticalresourceapi.domain.reservation.ReservationController;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
+import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -41,6 +41,7 @@ public class ReservationControllerTest {
     @MockitoBean
     private ResourceRepository resourceRepository;
 
+
     @Test
     public void should_return_201_when_creating_reservation() throws Exception {
         when(reservationService.createReservation(any(ReservationRequest.class))).thenReturn(
@@ -60,5 +61,21 @@ public class ReservationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"userId\":1,\"resourceId\":1,\"startDate\":\"" + today + "\",\"endDate\":\"" + tomorrow + "\"}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void should_return_200_when_getting_reservations() throws Exception {
+        when(userRepository.findByUsername("jdupont")).thenReturn(
+                Optional.ofNullable(User.builder().username("jdupont").build())
+        );
+
+        when(reservationService.getReservations(any(User.class))).thenReturn(List.of(
+                ReservationResponse.builder().userId(1L).build()
+        ));
+
+        mockMvc.perform(get("/reservations")
+                .param("username", "jdupont"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
     }
 }

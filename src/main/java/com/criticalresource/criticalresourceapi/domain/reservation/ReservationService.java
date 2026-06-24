@@ -2,10 +2,13 @@ package com.criticalresource.criticalresourceapi.domain.reservation;
 
 import com.criticalresource.criticalresourceapi.domain.resource.Resource;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
+import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +45,14 @@ public class ReservationService {
 
         Reservation saved = reservationRepository.save(reservation);
         return toResponse(saved);
+    }
+
+    public List<ReservationResponse> getReservations(User user) {
+        Role role = user.getRole();
+        if (role.equals(Role.ADMIN) || role.equals(Role.GESTIONNAIRE)) {
+            return reservationRepository.findAll().stream().map(this::toResponse).toList();
+        } else {
+            return reservationRepository.findByUser(user).stream().map(this::toResponse).toList();
+        }
     }
 }
