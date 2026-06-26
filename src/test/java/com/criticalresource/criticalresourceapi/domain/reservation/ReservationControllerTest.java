@@ -2,7 +2,6 @@ package com.criticalresource.criticalresourceapi.domain.reservation;
 
 import com.criticalresource.criticalresourceapi.auth.JwtService;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
-import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
