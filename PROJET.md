@@ -61,31 +61,38 @@ Projet portfolio orienté défense/industrie.
 - [x] 5.2 Lister les réservations selon les droits de l'utilisateur connecté
 - [x] 5.3 Permettre l'annulation d'une réservation avec vérification des droits
 
-### 🚧 Epic 6 — Audit & Docs (branche : epic/6-audit-docs)
-- [ ] 6.1 Exposer l'historique complet des actions sensibles, accessible ADMIN uniquement
-- [ ] 6.2 Documenter tous les endpoints avec OpenAPI et Swagger UI
-- [ ] 6.3 Couvrir les scénarios critiques avec des tests d'intégration Testcontainers
+### ✅ Epic 6 — Audit & Docs (mergée)
+- [x] 6.1 Exposer l'historique complet des actions sensibles, accessible ADMIN uniquement
+- [x] 6.2 Documenter tous les endpoints avec OpenAPI et Swagger UI
+- [x] 6.3 Couvrir les scénarios critiques avec des tests d'intégration Testcontainers
 
-### ⏳ Epic 7 — Robustesse & Finalisation
+### 🚧 Epic 7 — Robustesse & Finalisation (branche : epic/7-robustesse)
 - [ ] 7.1 Gestion globale des erreurs (handler HTTP propre)
 - [ ] 7.2 Validation des entrées avec messages d'erreur explicites
 - [ ] 7.3 Sécurisation des endpoints par rôle
 - [ ] 7.4 Données initiales au démarrage (admin par défaut)
+- [ ] 7.5 Tracer les actions sensibles dans le journal d'audit
 
 ## Structure du projet
 \```
 src/main/java/com/criticalresource/criticalresourceapi/
 ├── auth/
+│   ├── AuthController.java
 │   ├── AuthService.java
 │   ├── JwtService.java
-│   └── JwtAuthenticationFilter.java
+│   ├── JwtAuthenticationFilter.java
+│   └── LoginRequest.java
 ├── config/
+│   ├── OpenApiConfig.java
 │   └── SecurityConfig.java
 └── domain/
     ├── audit/
     │   ├── AuditAction.java
     │   ├── AuditLog.java
-    │   └── AuditLogRepository.java
+    │   ├── AuditLogController.java
+    │   ├── AuditLogRepository.java
+    │   ├── AuditLogResponse.java
+    │   └── AuditLogService.java
     ├── reservation/
     │   ├── Reservation.java
     │   ├── ReservationController.java
