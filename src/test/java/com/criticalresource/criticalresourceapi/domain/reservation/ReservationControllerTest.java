@@ -2,6 +2,7 @@ package com.criticalresource.criticalresourceapi.domain.reservation;
 
 import com.criticalresource.criticalresourceapi.auth.JwtService;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
+import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -77,5 +77,19 @@ public class ReservationControllerTest {
                 .param("username", "jdupont"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
+    }
+
+    @Test
+    public void should_return_200_when_canceling_reservation() throws Exception {
+        when(reservationService.cancelReservation(eq(1L), any(User.class))).thenReturn(
+                ReservationResponse.builder()
+                        .id(1L)
+                        .status(ReservationStatus.CANCELLED)
+                        .build()
+        );
+
+        mockMvc.perform(put("/reservations/1/cancel"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("CANCELLED"));
     }
 }

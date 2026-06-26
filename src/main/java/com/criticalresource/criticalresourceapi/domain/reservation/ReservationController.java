@@ -33,4 +33,10 @@ public class ReservationController {
         List<ReservationResponse> reservationResponse = reservationService.getReservations(user);
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponse);
     }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<ReservationResponse> cancelReservation(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        ReservationResponse reservationResponse = reservationService.cancelReservation(id, user);
+        return ResponseEntity.ok(reservationResponse);
+    }
 }

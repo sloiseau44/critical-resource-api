@@ -56,12 +56,21 @@ Projet portfolio orienté défense/industrie.
 - [x] 4.4 Permettre à un GESTIONNAIRE de modifier les informations d'une ressource
 - [x] 4.5 Désactiver une ressource sans la supprimer physiquement de la base
 
-### 🚧 Epic 5 — API Reservations (branche : epic/5-api-reservations)
-- [ ] 5.1 Permettre à un OPERATEUR de réserver une ressource sur une plage horaire
-- [ ] 5.2 Lister les réservations selon les droits de l'utilisateur connecté
-- [ ] 5.3 Permettre l'annulation d'une réservation avec vérification des droits
-- 
-### ⏳ Epic 6 — Audit & Docs
+### ✅ Epic 5 — API Reservations (mergée)
+- [x] 5.1 Permettre à un OPERATEUR de réserver une ressource sur une plage horaire
+- [x] 5.2 Lister les réservations selon les droits de l'utilisateur connecté
+- [x] 5.3 Permettre l'annulation d'une réservation avec vérification des droits
+
+### 🚧 Epic 6 — Audit & Docs (branche : epic/6-audit-docs)
+- [ ] 6.1 Exposer l'historique complet des actions sensibles, accessible ADMIN uniquement
+- [ ] 6.2 Documenter tous les endpoints avec OpenAPI et Swagger UI
+- [ ] 6.3 Couvrir les scénarios critiques avec des tests d'intégration Testcontainers
+
+### ⏳ Epic 7 — Robustesse & Finalisation
+- [ ] 7.1 Gestion globale des erreurs (handler HTTP propre)
+- [ ] 7.2 Validation des entrées avec messages d'erreur explicites
+- [ ] 7.3 Sécurisation des endpoints par rôle
+- [ ] 7.4 Données initiales au démarrage (admin par défaut)
 
 ## Structure du projet
 \```
@@ -79,7 +88,11 @@ src/main/java/com/criticalresource/criticalresourceapi/
     │   └── AuditLogRepository.java
     ├── reservation/
     │   ├── Reservation.java
+    │   ├── ReservationController.java
     │   ├── ReservationRepository.java
+    │   ├── ReservationRequest.java
+    │   ├── ReservationResponse.java
+    │   ├── ReservationService.java
     │   └── ReservationStatus.java
     ├── resource/
     │   ├── Resource.java

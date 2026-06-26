@@ -26,6 +26,7 @@ public class ReservationService {
                 .resourceId(reservation.getResource().getId())
                 .startDate(reservation.getStartDate())
                 .endDate(reservation.getEndDate())
+                .status(reservation.getStatus())
                 .build();
     }
 
@@ -54,5 +55,26 @@ public class ReservationService {
         } else {
             return reservationRepository.findByUser(user).stream().map(this::toResponse).toList();
         }
+    }
+
+    public ReservationResponse cancelReservation(Long id, User user) {
+        Reservation existing = reservationRepository.findById(id).orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        Role role = user.getRole();
+
+        Reservation updated;
+
+        if (existing.getUser().getId().equals(user.getId())
+                || Role.ADMIN.equals(role)
+                || Role.GESTIONNAIRE.equals(role)) {
+            updated = Reservation.builder()
+                    .id(existing.getId())
+                    .status(ReservationStatus.CANCELLED)
+                    .build();
+        } else {
+            throw new RuntimeException("User not authorized to cancel the reservation " + id);
+        }
+
+        return toResponse(reservationRepository.save(updated));
     }
 }

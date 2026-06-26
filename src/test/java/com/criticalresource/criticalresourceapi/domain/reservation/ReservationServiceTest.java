@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -125,5 +126,102 @@ public class ReservationServiceTest {
         List<ReservationResponse> listResource = reservationService.getReservations(user);
 
         assertThat(listResource).hasSize(1);
+    }
+
+    @Test
+    public void should_cancel_reservation_when_admin_cancels_any_reservation() {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        when(reservationRepository.findById(1L)).thenReturn(
+                Optional.ofNullable(Reservation.builder()
+                        .id(1L)
+                        .user(User.builder().id(1L).build())
+                        .resource(Resource.builder().id(1L).build())
+                        .startDate(today)
+                        .endDate(tomorrow)
+                        .build())
+        );
+
+        User admin = User.builder().role(Role.ADMIN).build();
+
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(
+                Reservation.builder()
+                        .id(1L)
+                        .user(User.builder().id(1L).build())
+                        .resource(Resource.builder().id(1L).build())
+                        .startDate(today)
+                        .endDate(tomorrow)
+                        .status(ReservationStatus.CANCELLED)
+                        .build()
+        );
+
+        ReservationResponse reservationResponse = reservationService.cancelReservation(1L, admin);
+
+        assertThat(reservationResponse.getStatus()).isEqualTo(ReservationStatus.CANCELLED);
+    }
+
+    @Test
+    public void should_cancel_own_reservation() {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        User user = User.builder().id(1L).build();
+
+        when(reservationRepository.findById(1L)).thenReturn(
+                Optional.ofNullable(Reservation.builder()
+                        .id(1L)
+                        .user(User.builder().id(1L).build())
+                        .resource(Resource.builder().id(1L).build())
+                        .startDate(today)
+                        .endDate(tomorrow)
+                        .build())
+        );
+
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(
+                Reservation.builder()
+                        .id(1L)
+                        .user(User.builder().id(1L).build())
+                        .resource(Resource.builder().id(1L).build())
+                        .startDate(today)
+                        .endDate(tomorrow)
+                        .status(ReservationStatus.CANCELLED)
+                        .build()
+        );
+
+        ReservationResponse reservationResponse = reservationService.cancelReservation(1L, user);
+
+        assertThat(reservationResponse.getStatus()).isEqualTo(ReservationStatus.CANCELLED);
+        assertThat(reservationResponse.getUserId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void should_throw_exception_when_operateur_cancels_other_user_reservation() {
+
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        User user = User.builder().id(2L).role(Role.OPERATEUR).build();
+
+        when(reservationRepository.findById(1L)).thenReturn(
+                Optional.ofNullable(Reservation.builder()
+                        .id(1L)
+                        .user(User.builder().id(1L).build())
+                        .resource(Resource.builder().id(1L).build())
+                        .startDate(today)
+                        .endDate(tomorrow)
+                        .build())
+        );
+
+        assertThatThrownBy(() -> reservationService.cancelReservation(1L, user))
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void should_throw_exception_when_reservation_not_found() {
+        when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> reservationService.cancelReservation(2L, User.builder().build()))
+                .isInstanceOf(RuntimeException.class);
     }
 }
