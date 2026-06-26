@@ -35,7 +35,10 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<ReservationResponse> cancelReservation(@PathVariable Long id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ReservationResponse> cancelReservation(@PathVariable Long id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         ReservationResponse reservationResponse = reservationService.cancelReservation(id, user);
         return ResponseEntity.ok(reservationResponse);
     }

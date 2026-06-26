@@ -7,6 +7,7 @@ import com.criticalresource.criticalresourceapi.domain.resource.Resource;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceCategory;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceStatus;
+import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,7 @@ public class AuditLogRepositoryTest {
                 .username("jdupont")
                 .email("jdupont@test.fr")
                 .password("encoded_password")
+                .role(Role.OPERATEUR)
                 .build();
 
         userRepository.save(user);

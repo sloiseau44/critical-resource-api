@@ -42,6 +42,7 @@ public class ReservationService {
                 .resource(resource)
                 .startDate(reservationRequest.getStartDate())
                 .endDate(reservationRequest.getEndDate())
+                .status(ReservationStatus.PENDING)
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
@@ -69,6 +70,10 @@ public class ReservationService {
                 || Role.GESTIONNAIRE.equals(role)) {
             updated = Reservation.builder()
                     .id(existing.getId())
+                    .user(existing.getUser())
+                    .resource(existing.getResource())
+                    .startDate(existing.getStartDate())
+                    .endDate(existing.getEndDate())
                     .status(ReservationStatus.CANCELLED)
                     .build();
         } else {

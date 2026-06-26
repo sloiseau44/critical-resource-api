@@ -65,6 +65,9 @@ public class ResourceService {
 
         Resource updated = Resource.builder()
                 .id(existing.getId())
+                .name(existing.getName())
+                .description(existing.getDescription())
+                .category(existing.getCategory())
                 .status(ResourceStatus.DISABLED)
                 .build();
 

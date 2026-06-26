@@ -21,6 +21,7 @@ class UserRepositoryTest {
                 .username("jdupont")
                 .email("jdupont@defense.fr")
                 .password("encoded_password")
+                .role(Role.OPERATEUR)
                 .build();
 
         userRepository.save(user);
