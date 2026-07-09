@@ -2,6 +2,7 @@ package com.criticalresource.criticalresourceapi.domain.reservation;
 
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ReservationController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest reservationRequest) {
+    public ResponseEntity<ReservationResponse> createReservation(@Valid @RequestBody ReservationRequest reservationRequest) {
         ReservationResponse reservationResponse = reservationService.createReservation(reservationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationResponse);
     }

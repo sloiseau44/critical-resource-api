@@ -1,5 +1,6 @@
 package com.criticalresource.criticalresourceapi.domain.resource;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,13 @@ public class ResourceController {
     }
 
     @PostMapping
-    public ResponseEntity<ResourceResponse> createResource(@RequestBody ResourceRequest resourceRequest) {
+    public ResponseEntity<ResourceResponse> createResource(@Valid @RequestBody ResourceRequest resourceRequest) {
         ResourceResponse resourceResponse = resourceService.createResource(resourceRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(resourceResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResourceResponse> updateResource(@PathVariable Long id, @RequestBody ResourceRequest resourceRequest) {
+    public ResponseEntity<ResourceResponse> updateResource(@PathVariable Long id, @Valid @RequestBody ResourceRequest resourceRequest) {
         ResourceResponse resource = resourceService.updateResource(id, resourceRequest);
         return ResponseEntity.ok(resource);
     }
