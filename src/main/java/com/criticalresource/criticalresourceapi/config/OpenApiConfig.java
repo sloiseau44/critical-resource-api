@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-    @Value("${springdoc.info.version}")
-    private String version;
-
     @Bean
     public OpenAPI openAPI() {
+        String version = getClass().getPackage().getImplementationVersion();
+        if (version == null) version = "dev";
+
         return new OpenAPI()
                 .info(new Info()
                         .title("Critical Resource API")
