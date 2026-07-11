@@ -1,6 +1,7 @@
 package com.criticalresource.criticalresourceapi;
 
 import com.criticalresource.criticalresourceapi.auth.LoginRequest;
+import com.criticalresource.criticalresourceapi.domain.audit.AuditLogRepository;
 import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
 import com.criticalresource.criticalresourceapi.domain.user.UserRepository;
@@ -28,6 +29,9 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
+    @Autowired
+    protected AuditLogRepository auditLogRepository;
+
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16")
             .withDatabaseName("critical_resource_db_test")
@@ -42,6 +46,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected HttpHeaders createAdminHeaders() {
+        auditLogRepository.deleteAll();
         userRepository.deleteAll();
         userRepository.save(User.builder()
                 .username("admin")

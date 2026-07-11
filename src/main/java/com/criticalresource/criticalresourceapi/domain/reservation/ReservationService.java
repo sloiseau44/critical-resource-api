@@ -1,5 +1,7 @@
 package com.criticalresource.criticalresourceapi.domain.reservation;
 
+import com.criticalresource.criticalresourceapi.domain.audit.AuditAction;
+import com.criticalresource.criticalresourceapi.domain.audit.AuditLogService;
 import com.criticalresource.criticalresourceapi.domain.resource.Resource;
 import com.criticalresource.criticalresourceapi.domain.resource.ResourceRepository;
 import com.criticalresource.criticalresourceapi.domain.user.Role;
@@ -18,6 +20,8 @@ public class ReservationService {
     private final UserRepository userRepository;
 
     private final ResourceRepository resourceRepository;
+
+    private final AuditLogService auditLogService;
 
     private ReservationResponse toResponse(Reservation reservation) {
         return ReservationResponse.builder()
@@ -46,6 +50,9 @@ public class ReservationService {
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
+
+        auditLogService.log(AuditAction.CREATE, "Reservation", saved.getId());
+
         return toResponse(saved);
     }
 
@@ -79,6 +86,8 @@ public class ReservationService {
         } else {
             throw new RuntimeException("User not authorized to cancel the reservation " + id);
         }
+
+        auditLogService.log(AuditAction.UPDATE, "Reservation", updated.getId());
 
         return toResponse(reservationRepository.save(updated));
     }

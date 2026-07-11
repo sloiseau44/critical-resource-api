@@ -1,5 +1,7 @@
 package com.criticalresource.criticalresourceapi.domain.resource;
 
+import com.criticalresource.criticalresourceapi.domain.audit.AuditAction;
+import com.criticalresource.criticalresourceapi.domain.audit.AuditLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceService {
     private final ResourceRepository resourceRepository;
+
+    private final AuditLogService auditLogService;
 
     private ResourceResponse toResponse(Resource resource) {
         return ResourceResponse.builder()
@@ -37,6 +41,9 @@ public class ResourceService {
                 .build();
 
         Resource saved = resourceRepository.save(resource);
+
+        auditLogService.log(AuditAction.CREATE, resourceRequest.getName(), saved.getId());
+
         return toResponse(saved);
     }
 
@@ -57,7 +64,11 @@ public class ResourceService {
                 .status(existing.getStatus())
                 .build();
 
-        return toResponse(resourceRepository.save(updated));
+        Resource saved = resourceRepository.save(updated);
+
+        auditLogService.log(AuditAction.UPDATE, resourceRequest.getName(), saved.getId());
+
+        return toResponse(saved);
     }
 
     public ResourceResponse disableResource(Long id) {
@@ -71,7 +82,11 @@ public class ResourceService {
                 .status(ResourceStatus.DISABLED)
                 .build();
 
-        return toResponse(resourceRepository.save(updated));
+        Resource saved = resourceRepository.save(updated);
+
+        auditLogService.log(AuditAction.UPDATE, saved.getName(), saved.getId());
+
+        return toResponse(saved);
     }
 
     private Resource findResourceOrThrow(Long id) {

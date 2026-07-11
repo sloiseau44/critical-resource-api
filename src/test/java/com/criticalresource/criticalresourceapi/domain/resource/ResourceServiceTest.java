@@ -1,5 +1,6 @@
 package com.criticalresource.criticalresourceapi.domain.resource;
 
+import com.criticalresource.criticalresourceapi.domain.audit.AuditLogService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,9 @@ import static org.mockito.Mockito.when;
 public class ResourceServiceTest {
     @Mock
     private ResourceRepository resourceRepository;
+
+    @Mock
+    private AuditLogService auditLogService;
 
     @InjectMocks
     private ResourceService resourceService;

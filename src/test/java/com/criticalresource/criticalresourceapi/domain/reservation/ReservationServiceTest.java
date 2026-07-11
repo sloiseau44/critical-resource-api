@@ -1,5 +1,6 @@
 package com.criticalresource.criticalresourceapi.domain.reservation;
 
+import com.criticalresource.criticalresourceapi.domain.audit.AuditLogService;
 import com.criticalresource.criticalresourceapi.domain.resource.*;
 import com.criticalresource.criticalresourceapi.domain.user.Role;
 import com.criticalresource.criticalresourceapi.domain.user.User;
@@ -32,6 +33,9 @@ public class ReservationServiceTest {
 
     @InjectMocks
     private ReservationService reservationService;
+
+    @Mock
+    private AuditLogService auditLogService;
 
     @Test
     public void should_create_reservation() {
