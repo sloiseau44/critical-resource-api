@@ -66,12 +66,19 @@ Projet portfolio orienté défense/industrie.
 - [x] 6.2 Documenter tous les endpoints avec OpenAPI et Swagger UI
 - [x] 6.3 Couvrir les scénarios critiques avec des tests d'intégration Testcontainers
 
-### 🚧 Epic 7 — Robustesse & Finalisation (branche : epic/7-robustesse)
-- [ ] 7.1 Gestion globale des erreurs (handler HTTP propre)
-- [ ] 7.2 Validation des entrées avec messages d'erreur explicites
-- [ ] 7.3 Sécurisation des endpoints par rôle
-- [ ] 7.4 Données initiales au démarrage (admin par défaut)
-- [ ] 7.5 Tracer les actions sensibles dans le journal d'audit
+### ✅ Epic 7 — Robustesse & Finalisation (mergée)
+- [x] 7.1 Gestion globale des erreurs (handler HTTP propre)
+- [x] 7.2 Validation des entrées avec messages d'erreur explicites
+- [x] 7.3 Sécurisation des endpoints par rôle
+- [x] 7.4 Données initiales au démarrage (admin par défaut)
+- [x] 7.5 Tracer les actions sensibles dans le journal d'audit
+
+## Ce qui pourrait être ajouté (backlog)
+- Vérification de disponibilité d'une ressource avant réservation
+- Workflow de confirmation des réservations (PENDING → CONFIRMED)
+- Détection des chevauchements de dates
+- Pipeline CI/CD GitHub Actions
+- Monitoring avec Spring Actuator
 
 ## Structure du projet
 \```
@@ -83,36 +90,39 @@ src/main/java/com/criticalresource/criticalresourceapi/
 │   ├── JwtAuthenticationFilter.java
 │   └── LoginRequest.java
 ├── config/
+│   ├── DataInitializer.java
+│   ├── ErrorResponse.java
+│   ├── GlobalExceptionHandler.java
 │   ├── OpenApiConfig.java
 │   └── SecurityConfig.java
 └── domain/
-    ├── audit/
-    │   ├── AuditAction.java
-    │   ├── AuditLog.java
-    │   ├── AuditLogController.java
-    │   ├── AuditLogRepository.java
-    │   ├── AuditLogResponse.java
-    │   └── AuditLogService.java
-    ├── reservation/
-    │   ├── Reservation.java
-    │   ├── ReservationController.java
-    │   ├── ReservationRepository.java
-    │   ├── ReservationRequest.java
-    │   ├── ReservationResponse.java
-    │   ├── ReservationService.java
-    │   └── ReservationStatus.java
-    ├── resource/
-    │   ├── Resource.java
-    │   ├── ResourceCategory.java
-    │   ├── ResourceController.java
-    │   ├── ResourceRepository.java
-    │   ├── ResourceRequest.java
-    │   ├── ResourceResponse.java
-    │   ├── ResourceService.java
-    │   └── ResourceStatus.java
-    └── user/
-        ├── Role.java
-        ├── User.java
-        └── UserRepository.java
+├── audit/
+│   ├── AuditAction.java
+│   ├── AuditLog.java
+│   ├── AuditLogController.java
+│   ├── AuditLogRepository.java
+│   ├── AuditLogResponse.java
+│   └── AuditLogService.java
+├── reservation/
+│   ├── Reservation.java
+│   ├── ReservationController.java
+│   ├── ReservationRepository.java
+│   ├── ReservationRequest.java
+│   ├── ReservationResponse.java
+│   ├── ReservationService.java
+│   └── ReservationStatus.java
+├── resource/
+│   ├── Resource.java
+│   ├── ResourceCategory.java
+│   ├── ResourceController.java
+│   ├── ResourceRepository.java
+│   ├── ResourceRequest.java
+│   ├── ResourceResponse.java
+│   ├── ResourceService.java
+│   └── ResourceStatus.java
+└── user/
+├── Role.java
+├── User.java
+└── UserRepository.java
 
 \```
