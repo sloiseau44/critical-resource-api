@@ -2,9 +2,10 @@ FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 COPY src ./src
-RUN ./mvnw package -DskipTests
+RUN ./mvnw package -Dtest="!*IntegrationTest,!*RepositoryTest" -DfailIfNoTests=false
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
