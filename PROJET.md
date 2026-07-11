@@ -114,4 +114,5 @@ src/main/java/com/criticalresource/criticalresourceapi/
         ├── Role.java
         ├── User.java
         └── UserRepository.java
+
 \```
